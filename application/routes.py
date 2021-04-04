@@ -39,7 +39,7 @@ def index():
             error_message = "Error while parsing the input. (%s)" % str(e)
 
     else:
-        buy, sell = None
+        buy, sell = None, None
 
     return render_template('index.html',
                            zkill_link=request.args.get("zkill_link", ""),
