@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+    abbr[title] {
+      border-bottom: none !important;
+      cursor: inherit !important;
+      text-decoration: none !important;
+    }
+    </style>
+  </head>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+function Clipboard_CopyTo(value) {
+     var tempInput = document.createElement("input");
+     tempInput.value = value;
+     document.body.appendChild(tempInput);
+     tempInput.select();
+     document.execCommand("copy");
+     document.body.removeChild(tempInput);
+}
+</script>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+  <body>
+    <div class="container">
+      <div class="page-header">
+        <h1>Loot Share Calculator<small> - because it's better when shared</small></h1>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <form>
+            <div class="form-group">
+              <label for="base">zkill link</label>
+              <input type="text" class="form-control" id="base" name="zkill_link" placeholder="https://zkillboard.com/kill/91939468/" {% if zkill_link != "" %} value="{{ zkill_link }}" {% endif %}>
+            </div>
+            <div class="row">
+              <div class="select col-md-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div >
+        <div class="panel-footer">Version: {{ version }}</div>
+      </div>
+      {% if error_message %}
+          <div class="alert alert-danger" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          {{ error_message }}
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body">
+          <h4>Valid input examples:</h4>
+          <ul class="list-group">
+            <li class="list-group-item">https://zkillboard.com/kill/91939468/</li>
+            <li class="list-group-item">https://zkillboard.com/kill/91516874/</li>
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+      {% if buy %}
+      <!-- new panel -->
+      <div class="panel panel-default">
+        <div class="panel-body">
+            <p>Zkill Link: <a href="{{ zkill_link }}" target="_blank">{{ zkill_link}}</a></p>
+            <p>Jita Buy: <strong>{{ buy|currency }}</strong> ISK</p>
+            <p>Jita Sell: <strong>{{ sell|currency}}</strong> ISK </p>
+            <p>Corp Tax: <strong>{{ sell|calculate_tax|currency }}</strong> ISK</p>
+        </div>
+      </div>
+      {% endif %}
+      {% if buy %}
+      <!-- new panel -->
+      <div class="panel panel-default">
+          <div class="panel-body">
+
+              <table class="table table-striped">
+                  <thead>
+                      <tr>
+                          <th scope="col">Pilots involved</th>
+                          <th scope="col">Amount to share</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for i in range(0, 10) %}
+                      <tr>
+                          <td>{{ i+1 }} pilot{% if i > 0 %}s{% endif %}</td>
+                          <td style="text-align:right">{{ buy|calculate_price(i+1)|currency }} ISK</td>
+                          <td><button onclick="Clipboard_CopyTo({{ buy|calculate_price(i+1) }})">Copy</button></td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+        </div>
+      </div>
+      {% endif %}
+
+  </body>
+</html>
