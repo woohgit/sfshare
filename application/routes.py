@@ -8,12 +8,12 @@ from . import zkill_share
 def calculate_tax(price):
     # the price is always 20%
     tax = price * 0.20
-    return tax
+    return round(tax)
 
 @app.template_filter()
 def calculate_price(price, involved):
     tax = calculate_tax(price)
-    return (price - tax) / involved
+    return round((price - tax) / involved)
 
 @app.template_filter()
 def currency(amount):
