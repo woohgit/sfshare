@@ -46,7 +46,7 @@ function Clipboard_CopyTo(value) {
           <form method="post">
             <div class="form-group">
               <label for="zkill_links">zkillboard links: (one per line)</label>
-              <textarea id="zkill_links" name="zkill_links" class="form-control" placeholder="https://zkillboard.com/kill/1234567" rows="10">{% if zkill_links != ""%}{{ zkill_links}}{% endif %}</textarea>
+              <textarea id="zkill_links" name="zkill_links" class="form-control" placeholder="https://zkillboard.com/kill/1234567" rows="10">{% if zkill_links != None %}{{ zkill_links}}{% endif %}</textarea>
             </div>
             <div class="row">
               <div class="select col-md-2">
