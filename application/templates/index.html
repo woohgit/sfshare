@@ -80,7 +80,7 @@ function Clipboard_CopyTo(value) {
             <p>Zkill Link: <a href="{{ zkill_link }}" target="_blank">{{ zkill_link}}</a></p>
             <p>Jita Buy: <strong>{{ buy|currency }}</strong> ISK</p>
             <p>Jita Sell: <strong>{{ sell|currency}}</strong> ISK </p>
-            <p>Corp Tax: <strong>{{ sell|calculate_tax|currency }}</strong> ISK</p>
+            <p>Corp Tax: <strong>{{ sell|calculate_tax|currency }}</strong> ISK <button onclick="Clipboard_CopyTo({{ sell|calculate_tax }})">Copy</button></p>
         </div>
       </div>
       {% endif %}
