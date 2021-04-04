@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Loot Share Calculator</title>
     <style>
     abbr[title] {
       border-bottom: none !important;
@@ -39,14 +39,14 @@ function Clipboard_CopyTo(value) {
   <body>
     <div class="container">
       <div class="page-header">
-        <h1>Loot Share Calculator<small> - because it's better when shared</small></h1>
+        <h1><a href="/">Loot Share Calculator</a><small> - because it's better when shared</small></h1>
       </div>
       <div class="panel panel-default">
         <div class="panel-body">
-          <form>
+          <form method="post">
             <div class="form-group">
-              <label for="base">zkill link</label>
-              <input type="text" class="form-control" id="base" name="zkill_link" placeholder="https://zkillboard.com/kill/91939468/" {% if zkill_link != "" %} value="{{ zkill_link }}" {% endif %}>
+              <label for="zkill_links">zkillboard links: (one per line)</label>
+              <textarea id="zkill_links" name="zkill_links" class="form-control" placeholder="https://zkillboard.com/kill/1234567" rows="10">{% if zkill_links != ""%}{{ zkill_links}}{% endif %}</textarea>
             </div>
             <div class="row">
               <div class="select col-md-2">
@@ -73,18 +73,17 @@ function Clipboard_CopyTo(value) {
         </div>
       </div>
       {% endif %}
-      {% if buy %}
+      {% if results %}
+      {% for item in results %}
       <!-- new panel -->
       <div class="panel panel-default">
         <div class="panel-body">
-            <p>Zkill Link: <a href="{{ zkill_link }}" target="_blank">{{ zkill_link}}</a></p>
-            <p>Jita Buy: <strong>{{ buy|currency }}</strong> ISK</p>
-            <p>Jita Sell: <strong>{{ sell|currency}}</strong> ISK </p>
-            <p>Corp Tax: <strong>{{ sell|calculate_tax|currency }}</strong> ISK <button onclick="Clipboard_CopyTo({{ sell|calculate_tax }})">Copy</button></p>
+            <p>Zkill Link: <a href="{{ item["link"] }}" target="_blank">{{ item["link"] }}</a></p>
+            <p>Jita Buy: <strong>{{ item["buy"]|currency }}</strong> ISK</p>
+            <p>Jita Sell: <strong>{{ item["sell"]|currency}}</strong> ISK </p>
+            <p>Corp Tax: <strong>{{ item["buy"]|calculate_tax|currency }}</strong> ISK <button onclick="Clipboard_CopyTo({{ item["buy"]|calculate_tax }})">Copy</button></p>
         </div>
       </div>
-      {% endif %}
-      {% if buy %}
       <!-- new panel -->
       <div class="panel panel-default">
           <div class="panel-body">
@@ -100,15 +99,15 @@ function Clipboard_CopyTo(value) {
                       {% for i in range(0, 10) %}
                       <tr>
                           <td>{{ i+1 }} pilot{% if i > 0 %}s{% endif %}</td>
-                          <td style="text-align:right">{{ buy|calculate_price(i+1)|currency }} ISK</td>
-                          <td><button onclick="Clipboard_CopyTo({{ buy|calculate_price(i+1) }})">Copy</button></td>
+                          <td style="text-align:right">{{ item["buy"]|calculate_price(i+1)|currency }} ISK</td>
+                          <td><button onclick="Clipboard_CopyTo({{ item["buy"]|calculate_price(i+1) }})">Copy</button></td>
                       </tr>
                       {% endfor %}
                   </tbody>
               </table>
         </div>
       </div>
+      {% endfor %}
       {% endif %}
-
   </body>
 </html>

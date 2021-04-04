@@ -25,25 +25,30 @@ def ping_pong():
     return jsonify('pong!')
 
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     version = os.getenv("GIT_SHA")
-    zkill_link = request.args.get("zkill_link")
     error_message = None
+    zkill_links = None
+    results = []
+    if request.method == 'POST':
+        zkill_links = request.form["zkill_links"]
 
-    if zkill_link is not None:
-        try:
-            buy, sell = zkill_share.get_buy_sell_from_appraisal(zkill_link)
-        except Exception as e:
-            buy, sell = None
-            error_message = "Error while parsing the input. (%s)" % str(e)
-
-    else:
-        buy, sell = None, None
+    if zkill_links is not None:
+        links = zkill_links.splitlines()
+        for link in links:
+            try:
+                if link:
+                    buy, sell = zkill_share.get_buy_sell_from_appraisal(link)
+                    results.append({"link": link, "buy": buy, "sell": sell, "error": None})
+                else:
+                    continue
+            except Exception as e:
+                error_message = "Error while parsing the input. (%s) for URL %s" % (str(e), link)
+                results.append({"link": link, "buy": None, "sell": None, "error": error_message})
 
     return render_template('index.html',
-                           zkill_link=request.args.get("zkill_link", ""),
-                           buy=buy,
-                           sell=sell,
+                           zkill_links=zkill_links,
+                           results=results,
                            error_message=error_message,
                            version=version)
