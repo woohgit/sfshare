@@ -73,9 +73,9 @@ def get_buy_sell_from_appraisal(url):
     kill_id, kill_hash = get_kill_id_and_hash_from_url(url)
     items = get_dropped_items_with_volumes(kill_id, kill_hash)
     # print(items)
-    appraisal = fetch_appraisal(items)
-    return appraisal["appraisal"]["totals"]["buy"], appraisal["appraisal"]["totals"]["sell"]
+    if items:
+        appraisal = fetch_appraisal(items)
+        return appraisal["appraisal"]["totals"]["buy"], appraisal["appraisal"]["totals"]["sell"]
 
-#buy, sell = get_buy_sell_from_appraisal("https://zkillboard.com/kill/91939468/")
-#print("Sell: {:,.0f}".format(round(buy, 2)))
-#print("Buy: {:,.0f}".format(round(sell, 2)))
+    else:
+        return 0,0

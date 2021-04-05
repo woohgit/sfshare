@@ -79,11 +79,16 @@ function Clipboard_CopyTo(value) {
       <div class="panel panel-default">
         <div class="panel-body">
             <p>Zkill Link: <a href="{{ item["link"] }}" target="_blank">{{ item["link"] }}</a></p>
+            {% if item["buy"] == 0 %}
+            <p><strong>Nothing dropped</strong>, no payout.</p>
+            {% else %}
             <p>Jita Buy: <strong>{{ item["buy"]|currency }}</strong> ISK</p>
             <p>Jita Sell: <strong>{{ item["sell"]|currency}}</strong> ISK </p>
             <p>Corp Tax: <strong>{{ item["buy"]|calculate_tax|currency }}</strong> ISK <button onclick="Clipboard_CopyTo({{ item["buy"]|calculate_tax }})">Copy</button></p>
+            {% endif %}
         </div>
       </div>
+      {% if item["buy"] > 0  %}
       <!-- new panel -->
       <div class="panel panel-default">
           <div class="panel-body">
@@ -107,6 +112,7 @@ function Clipboard_CopyTo(value) {
               </table>
         </div>
       </div>
+      {% endif %}
       {% endfor %}
       {% endif %}
   </body>
