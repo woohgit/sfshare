@@ -42,7 +42,7 @@ def get_dropped_items_with_volumes(kill_id, esi_hash):
     result = r.json()
     items_dropped = []
     for items in result["victim"]["items"]:
-        if "quantity_dropped" in items:
+        if "quantity_dropped" in items and items["singleton"] == 0:
             items_dropped.append(
                 {"type_id": items["item_type_id"], "quantity": items["quantity_dropped"]})
     # print(items_dropped)
