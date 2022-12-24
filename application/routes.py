@@ -3,7 +3,8 @@ from flask import jsonify
 import os
 from . import zkill_share
 
-CORP_TAX = 0.20
+CORP_TAX = 0
+
 
 @app.template_filter()
 def calculate_tax(price):
@@ -51,7 +52,7 @@ def index():
                 else:
                     continue
             except Exception as e:
-                raise(e)
+                raise (e)
                 error_message = "Error while parsing the input. (%s) for URL %s" % (
                     e, link)
                 results.append({"link": link, "buy": None,
